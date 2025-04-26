@@ -4,23 +4,51 @@ import HomeScreen from '../screens/HomeScreen'
 import CardScreen from '../screens/CardScreen'
 import WishlistScreen from '../screens/WishlistScreen'
 import ProfileScreen from '../screens/ProfileScreen'
+import { Image } from 'react-native'
 
 const Tab = createBottomTabNavigator()
 
-export default function Navbar() {
+const icons = {
+    Home: require('../assets/icons/home.png'),
+    Cartes: require('../assets/icons/tarot.png'),
+    Wishlist: require('../assets/icons/favorite.png'),
+    Profil: require('../assets/icons/user.png'),
+}
+
+const Navbar = () => {
     return (
         <Tab.Navigator
-            screenOptions={{
-                headerShown: false,
-                tabBarStyle: { backgroundColor: '#1a1a2e' },
+            screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, size }) => {
+                    const iconSource = icons[route.name]
+
+                    return (
+                        <Image
+                            source={iconSource}
+                            style={{
+                                width: size,
+                                height: size,
+                                tintColor: focused ? '#ff00cc' : '#888',
+                            }}
+                            resizeMode="contain"
+                        />
+                    )
+                },
                 tabBarActiveTintColor: '#ff00cc',
-                tabBarInactiveTintColor: '#aaa',
-            }}
+                tabBarInactiveTintColor: '#888',
+                tabBarStyle: {
+                    backgroundColor: '#1a1a1a',
+                    borderTopWidth: 0,
+                },
+                headerShown: false,
+            })}
         >
-            <Tab.Screen name="Accueil" component={HomeScreen} />
+            <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Cartes" component={CardScreen} />
             <Tab.Screen name="Wishlist" component={WishlistScreen} />
             <Tab.Screen name="Profil" component={ProfileScreen} />
         </Tab.Navigator>
     )
 }
+
+export default Navbar
