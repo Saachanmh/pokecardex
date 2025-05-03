@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import { useFavorites } from '../contexts/FavoritesContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CardScreen = () => {
     const [cards, setCards] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [favorites, setFavorites] = useState([]);
     const [owned, setOwned] = useState([]);
     const [page, setPage] = useState(1);
     const cardsPerPage = 12;
+    const { favorites, updateFavorites } = useFavorites();
 
     useEffect(() => {
         const fetchCards = async () => {
@@ -25,9 +26,7 @@ const CardScreen = () => {
         };
 
         const loadStorage = async () => {
-            const storedFavorites = JSON.parse(await AsyncStorage.getItem('favorites')) || [];
             const storedOwned = JSON.parse(await AsyncStorage.getItem('owned')) || [];
-            setFavorites(storedFavorites);
             setOwned(storedOwned);
         };
 
@@ -35,12 +34,11 @@ const CardScreen = () => {
         loadStorage();
     }, []);
 
-    const handleFavorite = async (card) => {
+    const handleFavorite = (card) => {
         const updatedFavorites = favorites.includes(card.id)
             ? favorites.filter(id => id !== card.id)
             : [...favorites, card.id];
-        setFavorites(updatedFavorites);
-        await AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+        updateFavorites(updatedFavorites);
     };
 
     const handleOwned = async (card) => {
@@ -130,10 +128,8 @@ const styles = StyleSheet.create({
         margin: 5,
     },
     buttonText: {
-        fontSize: 36,
+        fontSize: 24,
         color: '#ff00cc',
-        backgroundColor: 'white',
-        borderRadius: 50,
     },
     favoriteButton: {
         position: 'absolute',

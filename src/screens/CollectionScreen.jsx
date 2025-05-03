@@ -1,29 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, ActivityIndicator } from 'react-native';
-import { useFavorites } from '../contexts/FavoritesContext';
 import axios from 'axios';
 
-const WishlistScreen = () => {
-    const { favorites } = useFavorites();
+const CollectionScreen = () => {
+    const { owned } = useCollection();
     const [cards, setCards] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const loadFavoriteCards = async () => {
+        const loadOwnedCards = async () => {
             try {
                 const response = await axios.get('https://api.tcgdex.net/v2/fr/cards');
                 const allCards = response.data.filter(card => card.image);
-                const favoriteCards = allCards.filter(card => favorites.includes(card.id));
-                setCards(favoriteCards);
+                const ownedCards = allCards.filter(card => owned.includes(card.id));
+                setCards(ownedCards);
                 setLoading(false);
             } catch (error) {
-                console.error('Erreur lors du chargement des cartes favorites :', error);
+                console.error('Erreur lors du chargement des cartes possédées :', error);
                 setLoading(false);
             }
         };
 
-        loadFavoriteCards();
-    }, [favorites]);
+        loadOwnedCards();
+    }, [owned]);
 
     return (
         <View style={styles.container}>
@@ -66,4 +65,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default WishlistScreen;
+export default CollectionScreen;
