@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
-import axios from 'axios';
-import { useFavorites } from '../contexts/FavoritesContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, Image, TouchableOpacity, Modal, Button } from 'react-native';
+import { useCollection } from '../contexts/FavoritesContext';
+import * as api from '../services/tcg-api';
 
 const CardScreen = () => {
     const [cards, setCards] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [owned, setOwned] = useState([]);
     const [page, setPage] = useState(1);
     const cardsPerPage = 12;
-    const { favorites, updateFavorites } = useFavorites();
+    const { favorites, updateFavorites, owned, updateOwned } = useCollection();
+    const [selectedCard, setSelectedCard] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         const fetchCards = async () => {
             try {
-                const response = await axios.get('https://api.tcgdex.net/v2/fr/cards');
-                const filteredCards = response.data.filter(card => card.image);
+                const allCards = await api.getAllCards();
+                const filteredCards = allCards.filter(card => card.image);
                 setCards(filteredCards);
                 setLoading(false);
             } catch (error) {
@@ -25,13 +25,7 @@ const CardScreen = () => {
             }
         };
 
-        const loadStorage = async () => {
-            const storedOwned = JSON.parse(await AsyncStorage.getItem('owned')) || [];
-            setOwned(storedOwned);
-        };
-
         fetchCards();
-        loadStorage();
     }, []);
 
     const handleFavorite = (card) => {
@@ -41,12 +35,11 @@ const CardScreen = () => {
         updateFavorites(updatedFavorites);
     };
 
-    const handleOwned = async (card) => {
+    const handleOwned = (card) => {
         const updatedOwned = owned.includes(card.id)
             ? owned.filter(id => id !== card.id)
             : [...owned, card.id];
-        setOwned(updatedOwned);
-        await AsyncStorage.setItem('owned', JSON.stringify(updatedOwned));
+        updateOwned(updatedOwned);
     };
 
     const handleNextPage = () => {
@@ -66,6 +59,11 @@ const CardScreen = () => {
         return cards.slice(startIndex, startIndex + cardsPerPage);
     };
 
+    const handleCardPress = (card) => {
+        setSelectedCard(card);
+        setModalVisible(true);
+    };
+
     return (
         <View style={styles.container}>
             {loading ? (
@@ -76,7 +74,7 @@ const CardScreen = () => {
                         data={getCardsForCurrentPage()}
                         keyExtractor={(item) => item.id}
                         renderItem={({ item }) => (
-                            <View style={styles.cardItem}>
+                            <TouchableOpacity style={styles.cardItem} onPress={() => handleCardPress(item)}>
                                 <Image style={styles.img} source={{ uri: item.image + '/low.jpg' }} />
                                 <TouchableOpacity style={styles.favoriteButton} onPress={() => handleFavorite(item)}>
                                     <Text style={styles.buttonText}>
@@ -88,7 +86,7 @@ const CardScreen = () => {
                                         {owned.includes(item.id) ? '✅' : '☐'}
                                     </Text>
                                 </TouchableOpacity>
-                            </View>
+                            </TouchableOpacity>
                         )}
                         numColumns={3}
                     />
@@ -103,6 +101,21 @@ const CardScreen = () => {
                     </View>
                 </>
             )}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}>
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalText}>Nom: {selectedCard?.name}</Text>
+                        <Text style={styles.modalText}>ID: {selectedCard?.id}</Text>
+                        <Button title="Fermer" onPress={() => setModalVisible(!modalVisible)} />
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };
@@ -149,6 +162,23 @@ const styles = StyleSheet.create({
     pageText: {
         marginHorizontal: 10,
         color: '#ff00cc',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: '#1a1a2e',
+        padding: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    modalText: {
+        fontSize: 18,
+        color: '#ff00cc',
+        marginBottom: 10,
     },
 });
 

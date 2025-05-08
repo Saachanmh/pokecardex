@@ -12,7 +12,7 @@ const icons = {
     Home: require('../assets/icons/home.png'),
     Cartes: require('../assets/icons/tarot.png'),
     Wishlist: require('../assets/icons/favorite.png'),
-    MyCollection: require('../assets/icons/user.png'),
+    Collection: require('../assets/icons/user.png'),
 }
 
 const Navbar = () => {
@@ -46,7 +46,7 @@ const Navbar = () => {
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Cartes" component={CardScreen} />
             <Tab.Screen name="Wishlist" component={WishlistScreen} />
-            <Tab.Screen name="Ma Collection" component={CollectionScreen} />
+            <Tab.Screen name="Collection" component={CollectionScreen} />
         </Tab.Navigator>
     )
 }

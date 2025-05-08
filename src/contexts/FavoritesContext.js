@@ -1,17 +1,20 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const FavoritesContext = createContext();
+const CollectionContext = createContext();
 
-export const FavoritesProvider = ({ children }) => {
+export const CollectionProvider = ({ children }) => {
     const [favorites, setFavorites] = useState([]);
+    const [owned, setOwned] = useState([]);
 
     useEffect(() => {
-        const loadFavorites = async () => {
+        const loadStorage = async () => {
             const storedFavorites = JSON.parse(await AsyncStorage.getItem('favorites')) || [];
+            const storedOwned = JSON.parse(await AsyncStorage.getItem('owned')) || [];
             setFavorites(storedFavorites);
+            setOwned(storedOwned);
         };
-        loadFavorites();
+        loadStorage();
     }, []);
 
     const updateFavorites = async (newFavorites) => {
@@ -19,11 +22,16 @@ export const FavoritesProvider = ({ children }) => {
         await AsyncStorage.setItem('favorites', JSON.stringify(newFavorites));
     };
 
+    const updateOwned = async (newOwned) => {
+        setOwned(newOwned);
+        await AsyncStorage.setItem('owned', JSON.stringify(newOwned));
+    };
+
     return (
-        <FavoritesContext.Provider value={{ favorites, updateFavorites }}>
+        <CollectionContext.Provider value={{ favorites, updateFavorites, owned, updateOwned }}>
             {children}
-        </FavoritesContext.Provider>
+        </CollectionContext.Provider>
     );
 };
 
-export const useFavorites = () => useContext(FavoritesContext);
+export const useCollection = () => useContext(CollectionContext);

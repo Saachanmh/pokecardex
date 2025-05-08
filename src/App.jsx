@@ -3,7 +3,7 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './navigation/MainNavigator';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BootSplash from 'react-native-bootsplash';
-import { FavoritesProvider } from './contexts/FavoritesContext';
+import { CollectionProvider } from './contexts/FavoritesContext';
 
 const myTheme = {
     ...DefaultTheme,
@@ -16,7 +16,7 @@ const myTheme = {
 function App() {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <FavoritesProvider>
+            <CollectionProvider>
                 <NavigationContainer
                     theme={myTheme}
                     onReady={() => {
@@ -25,7 +25,7 @@ function App() {
                 >
                     <MainNavigator />
                 </NavigationContainer>
-            </FavoritesProvider>
+            </CollectionProvider>
         </GestureHandlerRootView>
     );
 }

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, ActivityIndicator } from 'react-native';
-import { useFavorites } from '../contexts/FavoritesContext';
+import { useCollection } from '../contexts/FavoritesContext';
 import axios from 'axios';
 
 const WishlistScreen = () => {
-    const { favorites } = useFavorites();
+    const { favorites } = useCollection();
     const [cards, setCards] = useState([]);
     const [loading, setLoading] = useState(true);
 

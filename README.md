@@ -3,7 +3,7 @@
 Pokecard app est une application regroupant toutes les cartes du TCG Pokémon et permet aux fans de voir les cartes existantes, mais également de les ajouter à leurs favoris ou aux cartes qu'ils possèdent déjà afin de pouvoir faire un suivi de leur collection.
 
 ## Technologies utilisées
-React JS avec axios pour la gestion de l'API, react-navigation pour la navigation de l'application et la navbar, react bootsplash pour l'affichage d'une animation au démarrage de l'application.
+React JS avec axios pour la gestion de l'API, react-navigation pour la navigation de l'application et la navbar, react bootsplash pour l'affichage d'une animation au démarrage de l'application ainsi que l'async storage pour la gestion des cartes en wishlist et en collection.
 
 ## Fonctionnalités principales
 - Mise en place d'une navbar reprenant les onglets importants sur une application de gestion de cartes

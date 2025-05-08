@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, ActivityIndicator } from 'react-native';
+import { useCollection } from '../contexts/FavoritesContext';
 import axios from 'axios';
 
 const CollectionScreen = () => {
