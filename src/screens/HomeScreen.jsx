@@ -10,7 +10,6 @@ const HomeScreen = () => {
         const fetchRandomCard = async () => {
             try {
                 const allCards = await api.getAllCards();
-                console.log(allCards);
                 const allCardsImages = allCards.filter(card => card.image);
                 const randomIndex = Math.floor(Math.random() * allCardsImages.length);
                 setRandomCard(allCardsImages[randomIndex]);

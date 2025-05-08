@@ -13,7 +13,15 @@ const api = axios.create({
 const getAllCards = async () => {
     try {
         const response = await api.get('/fr/cards');
-        console.log(response);
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+    }
+};
+
+const getCardDetails = async (cardId) => {
+    try {
+        const response = await api.get('/fr/cards/' + cardId);
         return response.data;
     } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
@@ -22,6 +30,7 @@ const getAllCards = async () => {
 
 export {
     getAllCards,
+    getCardDetails,
 };
 
 

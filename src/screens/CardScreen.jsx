@@ -60,8 +60,10 @@ const CardScreen = () => {
     };
 
     const handleCardPress = (card) => {
-        setSelectedCard(card);
-        setModalVisible(true);
+        api.getCardDetails(card.id).then((cardDetails) => {
+            setSelectedCard(cardDetails);
+            setModalVisible(true);
+        });
     };
 
     return (
@@ -110,8 +112,9 @@ const CardScreen = () => {
                 }}>
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
+                        <Image style={styles.modalImage} source={{ uri: selectedCard?.image + '/high.jpg' }}/>
                         <Text style={styles.modalText}>Nom: {selectedCard?.name}</Text>
-                        <Text style={styles.modalText}>ID: {selectedCard?.id}</Text>
+                        <Text style={styles.modalText}>Extension: {selectedCard?.set.name}</Text>
                         <Button title="Fermer" onPress={() => setModalVisible(!modalVisible)} />
                     </View>
                 </View>
@@ -179,6 +182,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#ff00cc',
         marginBottom: 10,
+    },
+    modalImage: {
+        width: 245,
+        height: 336,
+        margin: 5,
     },
 });
 
