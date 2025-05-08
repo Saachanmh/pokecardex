@@ -9,8 +9,8 @@ const myTheme = {
     ...DefaultTheme,
     colors: {
         ...DefaultTheme.colors,
-        primary: '#222222'
-    }
+        primary: '#222222',
+    },
 };
 
 function App() {

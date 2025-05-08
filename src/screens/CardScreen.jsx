@@ -71,8 +71,9 @@ const CardScreen = () => {
             {loading ? (
                 <ActivityIndicator size="large" color="#ff00cc" />
             ) : (
-                <>
+                <View style={styles.mainContainer}>
                     <FlatList
+                        styles={styles.flatList}
                         data={getCardsForCurrentPage()}
                         keyExtractor={(item) => item.id}
                         renderItem={({ item }) => (
@@ -80,12 +81,12 @@ const CardScreen = () => {
                                 <Image style={styles.img} source={{ uri: item.image + '/low.jpg' }} />
                                 <TouchableOpacity style={styles.favoriteButton} onPress={() => handleFavorite(item)}>
                                     <Text style={styles.buttonText}>
-                                        {favorites.includes(item.id) ? '❤️' : '♡'}
+                                        {favorites.includes(item.id) ? '❤️' : '🤍'}
                                     </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.ownedButton} onPress={() => handleOwned(item)}>
                                     <Text style={styles.buttonText}>
-                                        {owned.includes(item.id) ? '✅' : '☐'}
+                                        {owned.includes(item.id) ? '✅' : '⬜'}
                                     </Text>
                                 </TouchableOpacity>
                             </TouchableOpacity>
@@ -101,7 +102,7 @@ const CardScreen = () => {
                             <Text style={styles.pageText}>Suivant</Text>
                         </TouchableOpacity>
                     </View>
-                </>
+                </View>
             )}
             <Modal
                 animationType="slide"
@@ -124,16 +125,24 @@ const CardScreen = () => {
 };
 
 const styles = StyleSheet.create({
+    mainContainer: {
+      flex: 1,
+        alignItems: 'center',
+    },
+    flatList: {
+        flex: 5,
+    },
     container: {
         flex: 1,
         backgroundColor: '#0f0f1a',
         alignItems: 'center',
         justifyContent: 'center',
+        paddingTop: 40,
     },
     cardItem: {
         backgroundColor: '#1a1a2e',
         padding: 5,
-        marginVertical: 5,
+        marginTop: 2,
         borderRadius: 8,
         alignItems: 'center',
         position: 'relative',
@@ -160,7 +169,7 @@ const styles = StyleSheet.create({
     pagination: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 20,
+        flex: 5,
     },
     pageText: {
         marginHorizontal: 10,

@@ -1,26 +1,26 @@
-import React from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import HomeScreen from '../screens/HomeScreen'
-import CardScreen from '../screens/CardScreen'
-import WishlistScreen from '../screens/WishlistScreen'
-import CollectionScreen from '../screens/CollectionScreen'
-import { Image } from 'react-native'
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import HomeScreen from '../screens/HomeScreen';
+import CardScreen from '../screens/CardScreen';
+import WishlistScreen from '../screens/WishlistScreen';
+import CollectionScreen from '../screens/CollectionScreen';
+import { Image } from 'react-native';
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator();
 
 const icons = {
     Home: require('../assets/icons/home.png'),
     Cartes: require('../assets/icons/tarot.png'),
     Wishlist: require('../assets/icons/favorite.png'),
-    Collection: require('../assets/icons/user.png'),
-}
+    Collection: require('../assets/icons/book.png'),
+};
 
 const Navbar = () => {
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, size }) => {
-                    const iconSource = icons[route.name]
+                    const iconSource = icons[route.name];
 
                     return (
                         <Image
@@ -32,7 +32,7 @@ const Navbar = () => {
                             }}
                             resizeMode="contain"
                         />
-                    )
+                    );
                 },
                 tabBarActiveTintColor: '#ff00cc',
                 tabBarInactiveTintColor: '#888',
@@ -48,7 +48,7 @@ const Navbar = () => {
             <Tab.Screen name="Wishlist" component={WishlistScreen} />
             <Tab.Screen name="Collection" component={CollectionScreen} />
         </Tab.Navigator>
-    )
-}
+    );
+};
 
-export default Navbar
+export default Navbar;
